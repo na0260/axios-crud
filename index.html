@@ -45,6 +45,9 @@
 <script src="assets/js/axios.min.js"></script>
 <script>
     getList();
+    function createItem() {
+        window.location="pages/create.html";
+    }
     async function getList() {
         let res = await axios.get('https://crud.teamrabbil.com/api/v1/ReadProduct');
 
@@ -60,18 +63,18 @@
                     <td>${item['Qty']}</td>
                     <td>${item['TotalPrice']}</td>
                     <td>
-                    <button onclick="updateItem();">Update</button>
+                    <button onclick="updateItem('${item['_id']}');">Update</button>
                     <br>
                     <button onclick="deleteItem('${item['_id']}');">Delete</button>
                     </td>
                 </tr>`
                 );
             });
-        }else{
-            console.log('Error');
         }
     }
-
+    function updateItem(id){
+        window.location=`pages/update.html?id=${id}`;
+    }
     async function deleteItem(id) {
         let res = await axios.get(`https://crud.teamrabbil.com/api/v1/DeleteProduct/${id}`);
         if (res.status==200){
@@ -81,10 +84,6 @@
         }else{
             alert('Something Wrong!!!')
         }
-    }
-
-    function createItem() {
-        window.location="pages/create.html";
     }
 </script>
 </body>

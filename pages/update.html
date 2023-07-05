@@ -2,9 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Create Item</title>
+    <link rel="stylesheet" href="../assets/css/milligram.min.css">
 </head>
 <body>
+<div class="container">
+    <div class="row">
+        <div class="column">
+            <center>
+                <h1>CRUD operation using AXIOS</h1>
+            </center>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <center>
+                <h3>Item Update Form</h3>
+            </center>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <label>Product ID</label>
+            <input id="ProductID" type="text" readonly>
+            <label>Product Name</label>
+            <input id="ProductName" type="text">
+            <label>Product Code</label>
+            <input id="ProductCode" type="text">
+            <label>Product Image</label>
+            <input id="ProductImg" type="text">
+            <label>Unit Price</label>
+            <input id="UnitPrice" type="text" onkeyup="totalPrice();">
+            <label>Product Qty</label>
+            <input id="ProductQty" type="text" onkeyup="totalPrice();">
+            <label>Total Price</label>
+            <input id="ProductTotal" type="text" readonly>
+            <button onclick="updateItem();" type="submit">Submit</button>
+        </div>
+    </div>
+</div>
 
+<script src="../assets/js/axios.min.js"></script>
+<script>
+    fillData();
+    function totalPrice(){
+        document.getElementById('ProductTotal').value = document.getElementById('UnitPrice').value * document.getElementById('ProductQty').value;
+    }
+    async function fillData() {
+        const urlParam = new URLSearchParams(window.location.search);
+        const id = urlParam.get('id');
+        let URL = `https://crud.teamrabbil.com/api/v1/ReadProductByID/${id}`;
+        let res = await  axios.get(URL);
+        if(res.status===200){
+            let items= res.data['data'][0]
+            document.getElementById('ProductID').value=items['_id'];
+            document.getElementById('ProductName').value=items['ProductName'];
+            document.getElementById('ProductCode').value=items['ProductCode'];
+            document.getElementById('ProductImg').value=items['Img'];
+            document.getElementById('UnitPrice').value=items['UnitPrice'];
+            document.getElementById('ProductQty').value=items['Qty'];
+            document.getElementById('ProductTotal').value=items['TotalPrice'];
+        }
+    }
+
+    async function updateItem() {
+        let ProductID=document.getElementById('ProductID').value;
+        let ProductName=document.getElementById('ProductName').value;
+        let ProductCode=document.getElementById('ProductCode').value;
+        let ProductImg=document.getElementById('ProductImg').value;
+        let UnitPrice=document.getElementById('UnitPrice').value;
+        let ProductQty=document.getElementById('ProductQty').value;
+        let ProductTotal= document.getElementById('ProductTotal').value;
+        let URL = `https://crud.teamrabbil.com/api/v1/UpdateProduct/${ProductID}`
+
+        let res = await  axios.post(URL,
+            {
+                Img:ProductImg,
+                ProductCode:ProductCode,
+                ProductName:ProductName,
+                Qty:ProductQty,
+                UnitPrice:UnitPrice,
+                TotalPrice:ProductTotal
+            }
+        );
+        if(res.status===200){
+            window.location="../index.html";
+        }
+        else {
+            alert("Error");
+        }
+    }
+</script>
 </body>
 </html>
