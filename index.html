@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="assets/css/milligram.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="column">
+            <center>
+                <h1>CRUD operation using AXIOS</h1>
+            </center>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <table>
+                <thead>
+                <tr>
+                    <th>Sn.</th>
+                    <th>Product Name</th>
+                    <th>Product Code</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="assets/js/axios.min.js"></script>
+<script>
+    getList();
+    async function getList() {
+        let res = await axios.get('https://crud.teamrabbil.com/api/v1/ReadProduct');
+
+        if (res.status==200){
+            let list = res.data['data'];
+            list.forEach(item =>{
+                document.getElementById('body').innerHTML+=(
+                    `<tr>
+                    <td>${list.indexOf(item)+1}</td>
+                    <td>${item['ProductName']}</td>
+                    <td>${item['ProductCode']}</td>
+                    <td>${item['UnitPrice']}</td>
+                    <td>${item['Qty']}</td>
+                    <td>${item['TotalPrice']}</td>
+                    <td>
+                    <button onclick="updateItem();">Update</button>
+                    <br>
+                    <button onclick="deleteItem('${item['_id']}');">Delete</button>
+                    </td>
+                </tr>`
+                );
+            });
+        }else{
+            console.log('Error');
+        }
+    }
+
+    async function deleteItem(id) {
+        let res = await axios.get(`https://crud.teamrabbil.com/api/v1/DeleteProduct/${id}`);
+        if (res.status==200){
+            alert('Item removed Successfully.');
+            document.getElementById('body').innerHTML=' ';
+            getList();
+        }else{
+            alert('Something Wrong!!!')
+        }
+    }
+</script>
+</body>
+</html>
