@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Items List</title>
     <link rel="stylesheet" href="assets/css/milligram.min.css">
 </head>
 <body>
@@ -11,6 +11,13 @@
         <div class="column">
             <center>
                 <h1>CRUD operation using AXIOS</h1>
+            </center>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <center>
+                <button onclick="createItem();">Create Item Here</button>
             </center>
         </div>
     </div>
@@ -74,6 +81,10 @@
         }else{
             alert('Something Wrong!!!')
         }
+    }
+
+    function createItem() {
+        window.location="pages/create.html";
     }
 </script>
 </body>
